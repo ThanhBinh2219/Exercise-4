@@ -4,8 +4,8 @@ import com.javaweb.constant.SystemConstant;
 import com.javaweb.converter.UserConverter;
 import com.javaweb.model.dto.PasswordDTO;
 import com.javaweb.model.dto.UserDTO;
-import com.javaweb.entity.RoleEntity;
-import com.javaweb.entity.UserEntity;
+import com.javaweb.model.entity.RoleEntity;
+import com.javaweb.model.entity.UserEntity;
 import com.javaweb.exception.MyException;
 import com.javaweb.repository.RoleRepository;
 import com.javaweb.repository.UserRepository;
@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -174,5 +176,14 @@ public class UserService implements IUserService {
             userEntity.setStatus(0);
             userRepository.save(userEntity);
         }
+    }
+    @Override
+    public Map<Long, String> getListStaff() {
+        Map<Long, String> result = new HashMap<>();
+        List<UserEntity> staff = userRepository.findByStatusAndRoles_Code(1, "STAFF");
+        for (UserEntity userEntity : staff) {
+            result.put(userEntity.getId(), userEntity.getFullName());
+        }
+        return result;
     }
 }

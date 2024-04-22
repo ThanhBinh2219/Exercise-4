@@ -1,6 +1,7 @@
 package com.javaweb.controller.admin;
 
 import com.javaweb.constant.SystemConstant;
+
 import com.javaweb.model.dto.UserDTO;
 import com.javaweb.security.utils.SecurityUtils;
 import com.javaweb.service.IUserService;
@@ -11,7 +12,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +40,7 @@ public class UserController {
 		DisplayTagUtils.of(request, model);
 		List<UserDTO> news = userService.getUsers(model.getSearchValue(), PageRequest.of(model.getPage() - 1, model.getMaxPageItems()));
 		model.setListResult(news);
-		model.setTotalItems(userService.countTotalItems());
+		model.setTotalItems(userService.getTotalItems(model.getSearchValue()));
 		mav.addObject(SystemConstant.MODEL, model);
 		initMessageResponse(mav, request);
 		return mav;
@@ -62,7 +66,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/admin/user-edit-{id}", method = RequestMethod.GET)
-	public ModelAndView updateUser(@PathVariable("id") Long id, HttpServletRequest request) {
+	public ModelAndView updateUser(@PathVariable("id") Integer id, HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("admin/user/edit");
 		UserDTO model = userService.findUserById(id);
 		model.setRoleDTOs(roleService.getRoles());

@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@include file="/common/taglib.jsp" %>
-<c:url var="formUrl" value="/admin/user-list"/>
+<%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
+<c:url var="formCustomer" value="/admin/user-list"/>
 <c:url var="formAjax" value="/api/user"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -9,14 +10,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>
-        <%--<spring:message code="label.user.list"/>--%>
         Danh sách người dùng
     </title>
 </head>
 
 <body>
 <div class="main-content">
-    <form:form modelAttribute="model" action="${formUrl}" id="listForm" method="GET">
+    <form:form modelAttribute="model" action="${formCustomer}" id="listForm" method="GET">
         <div class="main-content-inner">
             <div class="breadcrumbs" id="breadcrumbs">
                 <script type="text/javascript">
@@ -126,7 +126,7 @@
                             <div class="col-xs-12">
                                 <div class="table-responsive">
                                     <display:table name="model.listResult" cellspacing="0" cellpadding="0"
-                                                   requestURI="${formUrl}" partialList="true" sort="external"
+                                                   requestURI="${formCustomer}" partialList="true" sort="external"
                                                    size="${model.totalItems}" defaultsort="2" defaultorder="ascending"
                                                    id="tableList" pagesize="${model.maxPageItems}"
                                                    export="false"
@@ -144,14 +144,14 @@
                                         <display:column headerClass="text-left" property="userName" title="Tên"/>
                                         <display:column headerClass="text-left" property="fullName" title="full name"/>
                                         <display:column headerClass="col-actions" title="Thao tác">
-                                            <c:if test="${tableList.roleCode != 'MANAGER'}">
+                                            <c:if test="${tableList.roleCode != 'ADMIN'}">
                                                 <a class="btn btn-sm btn-primary btn-edit" data-toggle="tooltip"
                                                    title="Cập nhật người dùng"
                                                    href='<c:url value="/admin/user-edit-${tableList.id}"/>'>
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                                 </a>
                                             </c:if>
-                                            <c:if test="${tableList.roleCode == 'MANAGER'}">
+                                            <c:if test="${tableList.roleCode == 'ADMIN'}">
                                                 <p>Không đươc thao tác</p>
                                             </c:if>
                                         </display:column>

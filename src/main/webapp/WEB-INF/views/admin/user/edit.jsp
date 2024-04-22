@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/common/taglib.jsp" %>
-<c:url var="formUrl" value="/api/user"/>
+<c:url var="formCustomer" value="/api/user"/>
 <html>
 <head>
     <title>Chỉnh sửa người dùng</title>
@@ -131,7 +131,7 @@
 
     function addUser(data) {
         $.ajax({
-            url: '${formUrl}',
+            url: '${formCustomer}',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
@@ -148,7 +148,7 @@
 
     function updateUser(data, id) {
         $.ajax({
-            url: '${formUrl}/' + id,
+            url: '${formCustomer}/' + id,
             type: 'PUT',
             dataType: 'json',
             contentType: 'application/json',
@@ -164,7 +164,7 @@
 
     function resetPassword(id) {
         $.ajax({
-            url: '${formUrl}/password/'+id+'/reset',
+            url: '${formCustomer}/password/'+id+'/reset',
             type: 'PUT',
             dataType: 'json',
             success: function (res) {

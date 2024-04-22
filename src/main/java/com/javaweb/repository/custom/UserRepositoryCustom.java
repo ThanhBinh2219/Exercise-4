@@ -1,6 +1,6 @@
 package com.javaweb.repository.custom;
 
-import com.javaweb.entity.UserEntity;
+import com.javaweb.model.entity.UserEntity;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

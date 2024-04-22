@@ -1,7 +1,7 @@
 package com.javaweb.converter;
 
 import com.javaweb.model.dto.UserDTO;
-import com.javaweb.entity.UserEntity;
+import com.javaweb.model.entity.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
