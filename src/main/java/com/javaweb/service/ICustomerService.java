@@ -12,4 +12,7 @@ public interface ICustomerService {
     List<CustomerDTO> findAll(Pageable pageable);
 
     int countTotalCustomer();
+    CustomerDTO addAndUpdateCustomer(CustomerDTO customerDTO);
+
+    void deleteCustomer(List<Long> ids);
 }

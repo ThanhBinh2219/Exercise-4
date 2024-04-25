@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class CustomerDTO extends AbstractDTO{
+    private Long id;
     private String name;
     private String managementStaff;
     private String customerPhone;

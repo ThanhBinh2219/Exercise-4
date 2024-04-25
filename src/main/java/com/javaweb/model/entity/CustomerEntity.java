@@ -3,12 +3,12 @@ package com.javaweb.model.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "customer")
 @Data
-public class CustomerEntity extends BaseEntity{
-
+public class CustomerEntity extends BaseEntity {
     @Column(name = "fullname")
     private String name;
     @Column(name = "phone")
@@ -18,4 +18,7 @@ public class CustomerEntity extends BaseEntity{
     private String companyName;
     private String demand;
     private String status;
+    @OneToMany(mappedBy = "customers")
+    private List<AssignmentCustomerEntity> assignmentCustomerEntities;
+
 }

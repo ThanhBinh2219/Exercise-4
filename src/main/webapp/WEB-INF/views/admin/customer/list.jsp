@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/common/taglib.jsp" %>
 <%@ taglib prefix="display" uri="http://displaytag.sf.net" %>
+<%String context = request.getContextPath();%>
 <%--<c:url var="customerListURL" value="/admin/customer-list"/>--%>
 <%--<c:url var="buildingAPI" value="/api/customer"/>--%>
 <html>
@@ -169,22 +170,22 @@
                     <display:column property="status" title="Tình trạng"/>
                     <display:column title="Thao tác">
                         <div class="hidden-sm hidden-xs btn-group">
-                            <button class="btn btn-xs btn-success" title="building-delivery">
+                            <button class="btn btn-xs btn-success" title="building-delivery"
+                                    onclick="transactionCustomer(${tableList.id})">
                                 <i class="ace-icon fa fa-check bigger-120"></i>
                             </button>
-
                             <a class="btn btn-xs btn-info" title="fix-building"
                                href="<c:url value='/admin/building-edit-${tableList.id}'/>">
                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
                             </a>
 
-                            <button class="btn btnRemove btn-xs btn-danger" title="remove-building"
+                            <button class="btn btnRemove btn-xs btn-danger" title="remove-customer"
                                     data="${tableList.id}">
                                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
                             </button>
                         </div>
                     </display:column>
-                    <input type="hidden" id="buildingId" name="id" value="${tableList.id}"/>
+                    <input type="hidden" id="customerId1" name="id" value="${tableList.id}"/>
                 </display:table>
             </div>
         </div><!-- /.page-content -->
@@ -208,7 +209,7 @@
                         </span>
                     </div>
                 </div>
-                <input type="hidden" id="buildingId" value="">
+                <input type="hidden" id="customerId2" value="">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="btnAssignmentBuilding">Thêm
@@ -222,5 +223,57 @@
 <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
     <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 </a>
+<script>
+    function transactionCustomer(customerId) {
+        transactionModalOpen();
+    }
+
+    function transactionModalOpen() {
+        $('#transactionTypeModal').modal();
+    }
+
+    $('.btnRemove').click(function (e) {
+        e.preventDefault();
+        var customerId = $(this).attr('data');
+        console.log(customerId)
+        var message = window.confirm("Bạn có chắc muốn xóa khách hàng này không?")
+        if (message) {
+            remove(customerId);
+        }
+    });
+    $('#removeBuilding').click(function (e) {
+        e.preventDefault();
+        var selectedCustomerId = $('input[name="checkList"]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        var customerIdString = selectedCustomerId.join('-');
+        console.log(customerIdString);
+        var warning = window.confirm("Bạn có chắc muốn xóa các khách hàng này không?");
+        if(!warning){
+            return;
+        }
+        remove(customerIdString);
+    });
+
+
+    function remove(customerId) {
+        console.log("delete")
+        $.ajax({
+            method: "DELETE",
+            url: "<%=context%>/api/customer/delete-customer/" + customerId,
+            // data: {id: customerId},
+            success: function (response) {
+                console.log(response);
+                window.location.reload();
+                // $('#listForm').submit();
+
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+
+</script>
 </body>
 </html>
