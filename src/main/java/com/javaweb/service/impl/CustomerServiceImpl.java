@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,6 +35,13 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
+    public CustomerEntity findById(Long id) {
+        CustomerEntity customerEntity = new CustomerEntity();
+        customerEntity = customerRepository.findById(id).get();
+       return  customerEntity;
+    }
+
+    @Override
     public int countTotalCustomer() {
         List<CustomerEntity> customerEntities = customerRepository.findAll();
         return customerEntities.size();
@@ -41,7 +49,6 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public CustomerDTO addAndUpdateCustomer(CustomerDTO customerDTO) {
-        Long customerId = customerDTO.getId();
         CustomerEntity customerEntity = customerConverter.converterToEntity(customerDTO);
         return customerConverter.converterToDTO(customerRepository.save(customerEntity));
 
@@ -54,6 +61,6 @@ public class CustomerServiceImpl implements ICustomerService {
             assignmentCustomerRepository.deleteAssignmentCustomer(id);
             customerRepository.deleteById(id);
         }
-        System.out.println("ok");
+//       ids.stream().forEach(customerRepository::deleteById);
     }
 }

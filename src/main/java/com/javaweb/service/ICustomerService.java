@@ -11,6 +11,7 @@ import java.util.List;
 public interface ICustomerService {
     List<CustomerDTO> findAll(Pageable pageable);
 
+    CustomerEntity findById(Long id);
     int countTotalCustomer();
     CustomerDTO addAndUpdateCustomer(CustomerDTO customerDTO);
 

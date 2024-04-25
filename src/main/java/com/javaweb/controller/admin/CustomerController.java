@@ -33,18 +33,35 @@ public class CustomerController {
     private MessageUtils messageUtil;
     @Autowired
     private ICustomerRepository customerRepository;
+
     @RequestMapping(value = "/admin/customer-list", method = RequestMethod.GET)
     public ModelAndView getCustomer(@ModelAttribute(SystemConstant.MODEL) CustomerSearchRequest model, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("admin/customer/list");
         mav.addObject("staffs", userService.getListStaff());
         mav.addObject("modelSearch", model);
         DisplayTagUtils.of(request, model);
-        PageRequest pageRequest = PageRequest.of(model.getPage()-1, model.getMaxPageItems());
+        PageRequest pageRequest = PageRequest.of(model.getPage() - 1, model.getMaxPageItems());
         List<CustomerDTO> result = customerService.findAll(pageRequest);
         model.setListResult(result);
         model.setTotalItems(customerService.countTotalCustomer());
         mav.addObject("customers", result);
         initMessageResponse(mav, request);
+        return mav;
+    }
+
+    @GetMapping(value = "/admin/customer-edit")
+    public ModelAndView addCustomer(@ModelAttribute("customerEdit") CustomerDTO customerDTO) {
+        ModelAndView mav = new ModelAndView("admin/customer/edit");
+        return mav;
+    }
+
+    @RequestMapping(value = "/admin/customer-edit-{id}", method = RequestMethod.GET)
+    public ModelAndView updateCustomer(@PathVariable("id") Long id) {
+        ModelAndView mav = new ModelAndView("admin/customer/edit");
+        mav.addObject("staffs", userService.getListStaff());
+        CustomerEntity customerEntity = new CustomerEntity();
+        customerEntity = customerService.findById(id);
+        mav.addObject("customerEdit", customerEntity);
         return mav;
     }
 

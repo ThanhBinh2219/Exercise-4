@@ -119,7 +119,7 @@
                     </div>
                 </div>
                 <div class="pull-right">
-                    <a href='/admin/customer-edit'/>
+                    <a href='<%=request.getContextPath()%>/admin/customer-edit'/>
                     <button class="btn btn-info btn-white" title="addBuilding">
                         <svg
                                 xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -175,7 +175,7 @@
                                 <i class="ace-icon fa fa-check bigger-120"></i>
                             </button>
                             <a class="btn btn-xs btn-info" title="fix-building"
-                               href="<c:url value='/admin/building-edit-${tableList.id}'/>">
+                               href="<c:url value='/admin/customer-edit-${tableList.id}'/>">
                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
                             </a>
 
