@@ -1,6 +1,7 @@
 package com.javaweb.controller.admin;
 
 import com.javaweb.constant.SystemConstant;
+import com.javaweb.model.dto.Customer;
 import com.javaweb.model.dto.CustomerDTO;
 import com.javaweb.model.entity.CustomerEntity;
 import com.javaweb.model.request.CustomerSearchRequest;
@@ -18,10 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class CustomerController {
@@ -59,9 +57,9 @@ public class CustomerController {
     public ModelAndView updateCustomer(@PathVariable("id") Long id) {
         ModelAndView mav = new ModelAndView("admin/customer/edit");
         mav.addObject("staffs", userService.getListStaff());
-        CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity = customerService.findById(id);
-        mav.addObject("customerEdit", customerEntity);
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO = customerService.findById(id);
+        mav.addObject("customerEdit", customerDTO);
         return mav;
     }
 
@@ -74,4 +72,12 @@ public class CustomerController {
         }
     }
 
+    private Map<String, Object> convert(CustomerSearchRequest customerSearchRequest) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("name", customerSearchRequest.getFullName());
+        result.put("phone", customerSearchRequest.getCustomerPhone());
+        result.put("email", customerSearchRequest.getEmail());
+        result.put("staff", customerSearchRequest.getStaffId());
+        return result;
+    }
 }

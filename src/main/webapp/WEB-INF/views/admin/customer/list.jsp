@@ -80,7 +80,7 @@
                                             </div>
                                             <div class="col-xs-4">
                                                 <label class="name">Di động</label>
-                                                <form:input path="numberPhone" cssClass="form-control"/>
+                                                <form:input path="customerPhone" cssClass="form-control"/>
                                             </div>
                                             <div class="col-xs-4">
                                                 <label class="name">Email</label>
@@ -185,35 +185,46 @@
                             </button>
                         </div>
                     </display:column>
-                    <input type="hidden" id="customerId1" name="id" value="${tableList.id}"/>
+                    <input type="hidden" id="customerId" value="${tableList.id}">
                 </display:table>
             </div>
         </div><!-- /.page-content -->
     </div>
 </div><!-- /.main-content -->
+<
 <div class="modal fade" id="transactionTypeModal" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nhập giao dịch</h4>
+                <h4 class="modal-title">Danh sách nhân viên</h4>
             </div>
             <div class="modal-body">
-                <div class="form-group has-success">
-                    <label for="inputSuccess" class="col-xs-12 col-sm-3 control-label no-padding-right">Chi tiết giao
-                        dịch</label>
-                    <div class="col-xs-12 col-sm-9">
-                        <span class="block input-icon input-icon-right">
-                            <input type="text" id="inputSuccess" class="width-100">
-                        </span>
-                    </div>
-                </div>
-                <input type="hidden" id="customerId2" value="">
+                <table id="staffList" class="table table-striped table-bordered table-hover"
+                       style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                    <thead>
+                    <tr>
+                        <th>Chọn</th>
+                        <th>Tên nhân viên</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${staffs}" var="item">
+                        <tr>
+                            <td class="center">
+                                <input type="checkbox" id="checkbox_2" name="staff" value="${item.key}">
+                            </td>
+                            <td>${item.value}</td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+                <input type="hidden" id="" value="">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnAssignmentBuilding">Thêm
-                    giao dịch
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnAssignmentBuilding">Giao cho
+                    nhân viên
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
             </div>
@@ -224,13 +235,70 @@
     <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 </a>
 <script>
+    let url = "/spring_boot_war_exploded/api/customer";
     function transactionCustomer(customerId) {
+        loadStaff(customerId)
+        console.log(customerId)
         transactionModalOpen();
     }
 
     function transactionModalOpen() {
         $('#transactionTypeModal').modal();
     }
+
+    function loadStaff(customerId) {
+        $.ajax({
+            type: "GET",
+            url: url + "/" + customerId + "/staffs",
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+                console.log("Success");
+                var elements = document.querySelectorAll(`input[name = "staff"]`);
+                // Reset checked
+                $.each(elements, function () {
+                    $('input[name="staff"]').prop('checked', false);
+                });
+                // Lấy dữ liệu lại từ database
+                $.each(response.data, function (index, staff) {
+                    $('input[name="staff"][value="' + staff.id + '"]').prop('checked', true);
+                });
+            },
+            error: function (response) {
+                console.log("Failed");
+                console.log(response);
+            }
+        });
+    }
+
+
+    $('#btnAssignmentBuilding').click(function (e) {
+        e.preventDefault();
+        var data = {};
+        data['customerId'] = $("#customerId").val();
+
+
+        var staffsChecked = $('#staffList').find('tbody input[type = checkbox]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        data['staffsChecked'] = staffsChecked;
+        console.log(data)
+        $.ajax({
+            type: "PUT",
+            url: url + "/staff",
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                console.log(response)
+                console.log("Success");
+            },
+            error: function (response) {
+                console.log("Failed");
+                console.log(response);
+            }
+        });
+    });
 
     $('.btnRemove').click(function (e) {
         e.preventDefault();
@@ -249,7 +317,7 @@
         var customerIdString = selectedCustomerId.join('-');
         console.log(customerIdString);
         var warning = window.confirm("Bạn có chắc muốn xóa các khách hàng này không?");
-        if(!warning){
+        if (!warning) {
             return;
         }
         remove(customerIdString);

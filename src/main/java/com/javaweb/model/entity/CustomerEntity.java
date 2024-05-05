@@ -20,5 +20,6 @@ public class CustomerEntity extends BaseEntity {
     private String status;
     @OneToMany(mappedBy = "customers")
     private List<AssignmentCustomerEntity> assignmentCustomerEntities;
-
+    @OneToMany(mappedBy = "customers")
+    private List<TransactionalEntity> transactionalEntities;
 }

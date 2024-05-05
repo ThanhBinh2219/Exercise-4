@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class CustomerSearchRequest extends AbstractDTO {
     private String fullName;
-    private String numberPhone;
+    private String customerPhone;
     private String email;
     private Integer staffId;
 }
